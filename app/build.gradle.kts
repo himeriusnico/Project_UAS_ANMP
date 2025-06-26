@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.ubaya.project_uas"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.ubaya.project_uas"
@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
     kapt(libs.room.compiler)
 
 }

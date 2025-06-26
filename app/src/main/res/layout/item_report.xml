@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/z"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Expense Title -->
+    <TextView
+        android:id="@+id/txtExpenseReport"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Expense A"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtBudgetReport"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Budget -->
+    <TextView
+        android:id="@+id/txtBudgetReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RpXXX"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Expense Price -->
+    <TextView
+        android:id="@+id/txtExpensesPriceReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RpAAA"
+        app:layout_constraintTop_toBottomOf="@id/txtExpenseReport"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txtExpensesPriceReport"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Budget Left Label -->
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Budget Left:"
+        app:layout_constraintTop_toBottomOf="@id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Budget Left Value -->
+    <TextView
+        android:id="@+id/txtBudgetLeftReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RpXX"
+        app:layout_constraintTop_toTopOf="@id/textView5"
+        app:layout_constraintStart_toEndOf="@id/textView5"
+        android:layout_marginStart="8dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
