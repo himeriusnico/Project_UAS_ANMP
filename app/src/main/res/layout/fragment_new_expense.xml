@@ -96,7 +96,7 @@
 
         <!-- Notes -->
         <EditText
-            android:id="@+id/txtNotes"
+            android:id="@+id/txtNominal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Notes"
@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Expense"
-            app:layout_constraintTop_toBottomOf="@id/txtNotes"
+            app:layout_constraintTop_toBottomOf="@id/txtNominal"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="24dp" />
 
