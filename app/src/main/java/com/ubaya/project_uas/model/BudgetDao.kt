@@ -1,5 +1,6 @@
 package com.ubaya.project_uas.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,7 +14,7 @@ interface BudgetDao {
     fun insertBudget(budget: Budget)
 
     @Query("SELECT * FROM budgets")
-    fun getAllBudgets(): List<Budget>
+    fun getAllBudgets(): LiveData<List<Budget>>
 
     @Query("SELECT * FROM budgets WHERE id = :budgetId LIMIT 1")
     fun getBudgetById(budgetId: Int): Budget?

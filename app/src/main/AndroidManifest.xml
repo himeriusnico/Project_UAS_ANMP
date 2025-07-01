@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Project_UAS"
         tools:targetApi="31">
         <activity
+            android:name=".view.TestAdapter"
+            android:exported="false" />
+        <activity
             android:name=".view.BudgetingFragment"
             android:exported="false" />
         <activity

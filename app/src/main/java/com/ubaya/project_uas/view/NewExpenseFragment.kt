@@ -1,60 +1,129 @@
 package com.ubaya.project_uas.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ubaya.project_uas.R
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.ubaya.project_uas.databinding.FragmentNewExpenseBinding
+import com.ubaya.project_uas.model.Budget
+import com.ubaya.project_uas.model.Expense
+import com.ubaya.project_uas.viewmodel.NewExpenseViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NewExpenseFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NewExpenseFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentNewExpenseBinding
+    private lateinit var viewModel: NewExpenseViewModel
+    private var selectedBudget: Budget? = null
+    private var totalSpent = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_expense, container, false)
+    ): View {
+        binding = FragmentNewExpenseBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NewExpenseFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewExpenseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this)[NewExpenseViewModel::class.java]
+
+        // Set current date
+        val formattedDate = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date())
+        binding.txtDate.text = formattedDate
+
+        // Observe budget list and populate spinner
+        viewModel.budgets.observe(viewLifecycleOwner) { budgetList ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                budgetList.map { it.name } // only names shown in spinner
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerExpense.adapter = adapter
+
+            // Handle selection
+            binding.spinnerExpense.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedBudget = budgetList[position]
+
+                        // Show budget value
+                        binding.txtBudget.text = "Rp${selectedBudget!!.amount}"
+
+                        // Observe total spent for selected budget
+                        viewModel.getTotalSpentForBudget(selectedBudget!!.id)
+                            .observe(viewLifecycleOwner) { total ->
+                                totalSpent = total ?: 0
+                                binding.txtCurrentSpending.text = "Rp$totalSpent"
+
+                                // Update progress bar
+                                val progressPercent =
+                                    (totalSpent * 100 / selectedBudget!!.amount).coerceAtMost(100)
+                                binding.progressBarExpense.progress = progressPercent
+                            }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        selectedBudget = null
+                    }
                 }
+        }
+
+        // Handle Add Expense button
+        binding.btnAddExpense.setOnClickListener {
+            val amountStr = binding.txtExpensePrice.text.toString()
+            val note = binding.txtNominal.text.toString()
+
+            if (selectedBudget == null) {
+                Toast.makeText(requireContext(), "Please select a budget", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
             }
+
+            val amount = amountStr.toIntOrNull()
+            if (amount == null || amount <= 0) {
+                Toast.makeText(
+                    requireContext(),
+                    "Enter a valid positive amount",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            if (amount + totalSpent > selectedBudget!!.amount) {
+                Toast.makeText(
+                    requireContext(),
+                    "Amount exceeds remaining budget",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            val expense = Expense(
+                budgetId = selectedBudget!!.id,
+                amount = amount,
+                description = note,
+                createdAt = System.currentTimeMillis()
+            )
+
+            viewModel.insertExpense(expense)
+
+            Toast.makeText(requireContext(), "Expense added", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
     }
 }

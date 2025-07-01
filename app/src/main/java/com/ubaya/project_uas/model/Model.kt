@@ -43,7 +43,7 @@ data class Budget(
             onDelete = ForeignKey.CASCADE
         )
     ),
-    indices = [Index(value=["budget_id"])] // Saat query room bisa langsung lompat ke index tersebut.
+    indices = [Index(value = ["budget_id"])] // Saat query room bisa langsung lompat ke index tersebut.
     //Dari segi query tidak cek 1 1, tapi seperti ada bookmark jadi langsung lompat
 
 )
@@ -59,3 +59,12 @@ data class Expense(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
+
+data class ExpenseDisplay(
+    val id: Int,
+    val amount: Int,
+    val description: String,
+    val createdAt: Long,
+    val budgetName: String
+)
+

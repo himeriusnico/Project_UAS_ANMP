@@ -1,5 +1,6 @@
 package com.ubaya.project_uas.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -25,5 +26,15 @@ interface ExpenseDao {
 
     // Get total spent for a specific budget (used in budgeting module)
     @Query("SELECT SUM(amount) FROM expense WHERE budget_id = :budgetId")
-    fun getTotalSpentForBudget(budgetId: Int): Int?
+    fun getTotalSpentForBudget(budgetId: Int): LiveData<Int>
+
+    @Query(
+        """
+        SELECT e.id, e.amount, e.description, e.created_at, b.name AS budgetName
+        FROM Expense e
+        INNER JOIN budgets b ON e.budget_id = b.id
+        ORDER BY e.created_at DESC
+    """
+    )
+    fun getAllExpensesWithBudgetName(): LiveData<List<ExpenseDisplay>>
 }
