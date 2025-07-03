@@ -32,6 +32,9 @@ class ProfileFragment : Fragment() {
         viewModel.message.observe(viewLifecycleOwner) { msg ->
             msg?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                if (it == "Password changed successfully") {
+                    viewModel.logout(requireContext())
+                }
             }
         }
 
