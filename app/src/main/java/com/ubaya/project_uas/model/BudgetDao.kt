@@ -27,7 +27,13 @@ interface BudgetDao {
     fun updateBudget(budget: Budget)
 
     // ✅ Delete budget (we assume you're already verifying ownership elsewhere)
-    @Query("DELETE FROM budgets WHERE id = :budgetId AND user_id = :userId")
-    fun deleteBudget(budgetId: Int, userId: Int)
+    @Query("DELETE FROM budgets WHERE id = :budgetId")
+    fun deleteBudgetById(budgetId: Int)
+
+    @Query("SELECT * FROM budgets WHERE id = :budgetId")
+    fun getBudgetById(budgetId: Int): Budget
+
+    @Query("UPDATE budgets SET name = :name, amount = :amount WHERE id = :budgetId")
+    fun updateBudget(budgetId: Int, name: String, amount: Int)
 }
 

@@ -49,4 +49,8 @@ interface ExpenseDao {
     @Query("SELECT b.id, b.name, b.amount, IFNULL(SUM(e.amount), 0) AS used FROM budgets b LEFT JOIN expense e ON e.budget_id = b.id GROUP BY b.id"
     )
     fun getBudgetsWithTotalUsed(): LiveData<List<BudgetWithTotalUsed>>
+
+    @Query("DELETE FROM expense WHERE budget_id = :budgetId")
+    fun deleteExpensesByBudgetId(budgetId: Int)
 }
+

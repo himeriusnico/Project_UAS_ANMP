@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentBudgetingBinding
-import com.ubaya.project_uas.viewmodel.BudgetingViewModel
+import com.ubaya.project_uas.viewmodel.DetailBudgetingViewModel
 
 class BudgetingFragment : Fragment() {
     private lateinit var binding: FragmentBudgetingBinding
-    private lateinit var viewModel: BudgetingViewModel
+    private lateinit var viewModel: DetailBudgetingViewModel
     private val userId: Int
         get() {
             val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
@@ -34,7 +34,7 @@ class BudgetingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[BudgetingViewModel::class.java]
+        viewModel = ViewModelProvider(this)[DetailBudgetingViewModel::class.java]
         binding.recyclerBudget.layoutManager = LinearLayoutManager(requireContext())
 
         binding.progressBar.visibility = View.VISIBLE
@@ -49,7 +49,9 @@ class BudgetingFragment : Fragment() {
                 binding.txtError.visibility = View.GONE
                 binding.recyclerBudget.visibility = View.VISIBLE
                 binding.recyclerBudget.adapter = BudgetingAdapter(budgetList) { budget ->
-                    Toast.makeText(requireContext(), "Edit ${budget.name}", Toast.LENGTH_SHORT).show()
+                    val action = BudgetingFragmentDirections
+                        .actionItemBudgetingToEditBudgetingFragment(budget.id)
+                    findNavController().navigate(action)
                 }
             }
         }

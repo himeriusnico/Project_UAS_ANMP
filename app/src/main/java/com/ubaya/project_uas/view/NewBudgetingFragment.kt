@@ -11,11 +11,11 @@ import androidx.navigation.Navigation
 import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentNewBudgetingBinding
 import com.ubaya.project_uas.model.Budget
-import com.ubaya.project_uas.viewmodel.NewBudgetingViewModel
+import com.ubaya.project_uas.viewmodel.DetailBudgetingViewModel
 
 class NewBudgetingFragment : Fragment() {
     private lateinit var binding: FragmentNewBudgetingBinding
-    private lateinit var viewModel: NewBudgetingViewModel
+    private lateinit var viewModel: DetailBudgetingViewModel
     private val userId: Int
         get() {
             val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
@@ -39,7 +39,7 @@ class NewBudgetingFragment : Fragment() {
             return
         }
 
-        viewModel = ViewModelProvider(this)[NewBudgetingViewModel::class.java]
+        viewModel = ViewModelProvider(this)[DetailBudgetingViewModel::class.java]
 
         binding.btnAdd.setOnClickListener{
             val name = binding.txtTitle.text.toString()

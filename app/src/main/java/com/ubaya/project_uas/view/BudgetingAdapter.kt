@@ -25,7 +25,7 @@ class BudgetingAdapter(
         holder.binding.txtBudgetName.text = budget.name
         holder.binding.txtBudgetNominal.text = "IDR ${budget.amount}"
 
-        holder.binding.txtBudgetName.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             onBudgetClick(budget)
         }
     }

@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_budgetingFragment_to_newBudgetingFragment"
             app:destination="@id/newBudgetingFragment" />
+        <action
+            android:id="@+id/action_itemBudgeting_to_editBudgetingFragment"
+            app:destination="@id/editBudgetingFragment" />
     </fragment>
     <fragment
         android:id="@+id/newBudgetingFragment"
@@ -49,5 +52,15 @@
         <action
             android:id="@+id/action_newBudgetingFragment_to_itemBudgeting"
             app:destination="@id/itemBudgeting" />
+    </fragment>
+    <fragment
+        android:id="@+id/editBudgetingFragment"
+        android:name="com.ubaya.project_uas.view.EditBudgetingFragment"
+        android:label="fragment_edit_budgeting"
+        tools:layout="@layout/fragment_edit_budgeting">
+
+        <argument
+            android:name="budgetId"
+            app:argType="integer" />
     </fragment>
 </navigation>
