@@ -22,15 +22,12 @@ interface ExpenseDao {
     fun getAllExpensesByUser(userId: Int): List<Expense>
 
 
-    // Get a specific expense by ID (if needed)
     @Query("SELECT * FROM expense WHERE id = :expenseId LIMIT 1")
     fun getExpenseById(expenseId: Int): Expense?
 
-    // Get all expenses for a specific budget
     @Query("SELECT * FROM expense WHERE budget_id = :budgetId ORDER BY created_at DESC")
     fun getExpensesByBudget(budgetId: Int): List<Expense>
 
-    // Get total spent for a specific budget (used in budgeting module)
     @Query("""
     SELECT SUM(e.amount) 
     FROM expense e 

@@ -45,18 +45,17 @@ class NewExpenseFragment : Fragment() {
 
 
 
-        // Set current date
         val formattedDate =
             SimpleDateFormat("dd MMMM yyyy HH.mm a", Locale.getDefault()).format(Date())
         binding.txtDate.text = formattedDate
 
-        // Observe budget list and populate spinner
+        // Observer untuk budget and buat populate spinner
         viewModel.getBudgetsByUser(userId).observe(viewLifecycleOwner) { budgetList ->
 
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                budgetList.map { it.name } // only names shown in spinner
+                budgetList.map { it.name }
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerExpense.adapter = adapter
@@ -72,10 +71,9 @@ class NewExpenseFragment : Fragment() {
                     ) {
                         selectedBudget = budgetList[position]
 
-                        // Show budget value
                         binding.txtBudget.text = "Rp${selectedBudget!!.amount}"
 
-                        // Observe total spent for selected budget
+                        // Observe buat total spent tiap budget set progress bar
                         viewModel.getTotalSpentForBudget(selectedBudget!!.id, userId)
                             .observe(viewLifecycleOwner) { total ->
                                 totalSpent = total ?: 0
@@ -94,7 +92,6 @@ class NewExpenseFragment : Fragment() {
                 }
         }
 
-        // Handle Add Expense button
         binding.btnAddExpense.setOnClickListener {
             val amountStr = binding.txtExpensePrice.text.toString()
             val note = binding.txtNominal.text.toString()

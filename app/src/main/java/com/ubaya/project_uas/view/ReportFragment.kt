@@ -30,7 +30,6 @@ class ReportFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize ViewModel (done in onViewCreated for consistency)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -43,26 +43,22 @@ class ExpenseTrackerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup ViewModel
         viewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
 
-        // Setup RecyclerView
         binding.recyclerViewExpenseTracker.layoutManager = LinearLayoutManager(requireContext())
 
-        // Observe expenses
         viewModel.getExpensesByUser(userId).observe(viewLifecycleOwner) { expenseList ->
             adapter = ExpenseTrackerAdapter(expenseList, ::onAmountClick)
             binding.recyclerViewExpenseTracker.adapter = adapter
         }
 
-        // FloatingActionButton click (optional)
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_expenseTrackerFragment_to_newExpenseFragment)
         }
 
     }
 
-    // Click handler for expense amount
+    //function buat saat expense nya di click terus munculin dialog
     private fun onAmountClick(expense: ExpenseDisplay) {
         val dialogBinding = DialogExpenseDetailBinding.inflate(LayoutInflater.from(requireContext()))
 
@@ -74,7 +70,6 @@ class ExpenseTrackerFragment : Fragment() {
         dialogBinding.chip2.text = expense.budgetName
         dialogBinding.txtAmount.text = "IDR %,d".format(expense.amount)
 
-        // Build the dialog with custom view
         val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()

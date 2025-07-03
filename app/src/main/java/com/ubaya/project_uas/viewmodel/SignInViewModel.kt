@@ -35,15 +35,4 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    private fun saveSession(userId: Int) {
-        val sharedPref = getApplication<Application>()
-            .getSharedPreferences("com.ubaya.project_uas.PREF", Context.MODE_PRIVATE)
-        sharedPref.edit().putInt("user_id", userId).apply()
-    }
-
-    fun clearSession() {
-        val sharedPref = getApplication<Application>()
-            .getSharedPreferences("com.ubaya.project_uas.PREF", Context.MODE_PRIVATE)
-        sharedPref.edit().remove("user_id").apply()
-    }
 }
