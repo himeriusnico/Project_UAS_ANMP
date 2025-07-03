@@ -20,18 +20,26 @@ data class User(
     var id: Int = 0
 }
 
-@Entity(tableName = "budgets")
+@Entity(
+    tableName = "budgets",
+    foreignKeys = [ForeignKey(
+        entity = User::class,
+        parentColumns = ["id"],
+        childColumns = ["user_id"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index(value = ["user_id"])]
+)
 data class Budget(
     @ColumnInfo(name = "name") var name: String,
-
     @ColumnInfo(name = "amount") var amount: Int,
-
-    @ColumnInfo(name = "created_at") var createdAt: Long = System.currentTimeMillis()
-
+    @ColumnInfo(name = "created_at") var createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "user_id") var userId: Int // foreign key to User
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }
+
 
 //STACK OVERFLOW tdk d ajarin di kelas
 @Entity(

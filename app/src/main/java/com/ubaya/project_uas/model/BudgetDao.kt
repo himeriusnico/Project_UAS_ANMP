@@ -13,15 +13,21 @@ interface BudgetDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertBudget(budget: Budget)
 
-    @Query("SELECT * FROM budgets")
-    fun getAllBudgets(): LiveData<List<Budget>>
+    // ✅ Only show budgets that belong to a specific user
+    @Query("SELECT * FROM budgets WHERE user_id = :userId")
+    fun getBudgetsByUser(userId: Int): LiveData<List<Budget>>
 
-    @Query("SELECT * FROM budgets WHERE id = :budgetId LIMIT 1")
-    fun getBudgetById(budgetId: Int): Budget?
+    // ✅ Get a specific budget by its ID and the user who owns it
+    @Query("SELECT * FROM budgets WHERE id = :budgetId AND user_id = :userId LIMIT 1")
+    fun getBudgetByIdAndUser(budgetId: Int, userId: Int): LiveData<Budget>
 
+
+    // ✅ Update (safe because you’ll pass the full budget object, which contains user_id already)
     @Update
     fun updateBudget(budget: Budget)
 
-    @Query("DELETE FROM budgets WHERE id = :budgetId")
-    fun deleteBudget(budgetId: Int)
+    // ✅ Delete budget (we assume you're already verifying ownership elsewhere)
+    @Query("DELETE FROM budgets WHERE id = :budgetId AND user_id = :userId")
+    fun deleteBudget(budgetId: Int, userId: Int)
 }
+
