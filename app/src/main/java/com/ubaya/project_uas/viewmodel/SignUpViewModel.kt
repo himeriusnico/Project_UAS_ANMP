@@ -30,17 +30,22 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     /**
      * Fungsi untuk mendaftarkan pengguna baru.
      */
-    fun register(username: String, firstName: String, lastName: String, password: String) {
-        if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()) {
+    fun register(username: String, firstName: String, lastName: String, password: String, confirm:String) {
+        if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
             _error.postValue("Semua kolom harus diisi")
             return
         }
 
-        viewModelScope.launch(Dispatchers.IO) { // ✅ gunakan background thread
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (userDao.getUserByUsername(username) != null) {
                     _error.postValue("Username sudah digunakan, silakan pilih yang lain")
-                } else {
+                } else if(!password.equals(confirm)){
+                    _error.postValue("Password tidak sama!")
+
+                }
+
+                else {
                     val newUser = User(
                         username = username,
                         firstName = firstName,

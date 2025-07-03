@@ -36,8 +36,12 @@ class SignUpFragment : Fragment() {
             val firstName = binding.etFirstName.text.toString()
             val lastName = binding.etLastName.text.toString()
             val password = binding.etPassword.text.toString()
+            val checkPass = binding.etConfirmPassword.text.toString()
 
-            viewModel.register(username, firstName, lastName, password)
+
+            viewModel.register(username, firstName, lastName, password, checkPass)
+
+
         }
 
         binding.txtSignIn.setOnClickListener {
@@ -48,7 +52,8 @@ class SignUpFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                Toast.makeText(context, "Registrasi berhasil! Silakan login.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Registrasi berhasil! Silakan login.", Toast.LENGTH_LONG)
+                    .show()
                 parentFragmentManager.popBackStack()
             }
         }
