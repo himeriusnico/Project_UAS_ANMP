@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentExpenseTrackerBinding
 import com.ubaya.project_uas.model.ExpenseDisplay
 import com.ubaya.project_uas.viewmodel.ExpenseViewModel
@@ -19,7 +21,6 @@ class ExpenseTrackerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // No special logic in onCreate for now
     }
 
     override fun onCreateView(
@@ -46,9 +47,10 @@ class ExpenseTrackerFragment : Fragment() {
         }
 
         // FloatingActionButton click (optional)
-        binding.fabExpenseTracker.setOnClickListener {
-            // TODO: navigate to add expense screen
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_expenseTrackerFragment_to_newExpenseFragment)
         }
+
     }
 
     // Click handler for expense amount
