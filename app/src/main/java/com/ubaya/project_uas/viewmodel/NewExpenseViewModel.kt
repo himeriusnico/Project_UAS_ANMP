@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ubaya.project_uas.model.Budget
 import com.ubaya.project_uas.model.Expense
 import com.ubaya.project_uas.model.UserDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewExpenseViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,7 +20,7 @@ class NewExpenseViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun insertExpense(expense: Expense) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO){
             db.expenseDao().insertExpense(expense)
         }
     }

@@ -42,7 +42,7 @@ class NewBudgetingFragment : Fragment() {
         viewModel = ViewModelProvider(this)[NewBudgetingViewModel::class.java]
 
         binding.btnAdd.setOnClickListener{
-            val name = binding.txtNominal.text.toString()
+            val name = binding.txtTitle.text.toString()
             val amount = binding.txtNominal.text.toString()
                 .replace("Rp", "")
                 .replace(".", "")
