@@ -18,7 +18,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     val newPassword = MutableLiveData<String>()
     val repeatPassword = MutableLiveData<String>()
     val message = MutableLiveData<String>()
-    val navigateToLogin = MutableLiveData<Boolean>()
 
     private val db = UserDatabase(application)
     private val userDao = db.userDao()
