@@ -17,7 +17,11 @@ import com.ubaya.project_uas.viewmodel.BudgetingViewModel
 class BudgetingFragment : Fragment() {
     private lateinit var binding: FragmentBudgetingBinding
     private lateinit var viewModel: BudgetingViewModel
-    private var userId = 1 // Replace this with actual login user ID
+    private val userId: Int
+        get() {
+            val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
+            return sharedPref.getInt("user_id", -1)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +37,19 @@ class BudgetingFragment : Fragment() {
         viewModel = ViewModelProvider(this)[BudgetingViewModel::class.java]
         binding.recyclerBudget.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.progressBar.visibility = View.VISIBLE
+        binding.txtError.visibility = View.GONE
+
         viewModel.getBudgetsByUser(userId).observe(viewLifecycleOwner) { budgetList ->
             binding.progressBar.visibility = View.GONE
             if (budgetList.isEmpty()) {
                 binding.txtError.visibility = View.VISIBLE
-                binding.txtError.text = "No budgets found"
+                binding.recyclerBudget.visibility = View.GONE
             } else {
                 binding.txtError.visibility = View.GONE
+                binding.recyclerBudget.visibility = View.VISIBLE
                 binding.recyclerBudget.adapter = BudgetingAdapter(budgetList) { budget ->
                     Toast.makeText(requireContext(), "Edit ${budget.name}", Toast.LENGTH_SHORT).show()
-                    // TODO: Navigate to edit screen
                 }
             }
         }

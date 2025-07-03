@@ -45,5 +45,9 @@
         android:id="@+id/newBudgetingFragment"
         android:name="com.ubaya.project_uas.view.NewBudgetingFragment"
         android:label="fragment_new_budgeting"
-        tools:layout="@layout/fragment_new_budgeting" />
+        tools:layout="@layout/fragment_new_budgeting" >
+        <action
+            android:id="@+id/action_newBudgetingFragment_to_itemBudgeting"
+            app:destination="@id/itemBudgeting" />
+    </fragment>
 </navigation>
