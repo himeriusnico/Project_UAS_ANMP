@@ -2,6 +2,7 @@ package com.ubaya.project_uas.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,11 @@ class SignInFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.userLiveData.observe(viewLifecycleOwner) { user ->
             user?.let {
+                val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
+                sharedPref.edit().putInt("user_id", it.id).apply()
+
+                val savedId = sharedPref.getInt("user_id", -1)
+                Log.d("DEBUG_SESSION", "Saved user_id: $savedId")
                 Toast.makeText(context, "Login berhasil!", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(requireContext(), MainActivity::class.java)

@@ -33,7 +33,7 @@ data class User(
 data class Budget(
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "amount") var amount: Int,
-    @ColumnInfo(name = "created_at") var createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "created_at") var createdAt: Long = System.currentTimeMillis() / 1000,
     @ColumnInfo(name = "user_id") var userId: Int // foreign key to User
 ) {
     @PrimaryKey(autoGenerate = true)

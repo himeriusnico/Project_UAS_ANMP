@@ -14,7 +14,7 @@ interface BudgetDao {
     fun insertBudget(budget: Budget)
 
     // ✅ Only show budgets that belong to a specific user
-    @Query("SELECT * FROM budgets WHERE user_id = :userId")
+    @Query("SELECT * FROM budgets WHERE user_id = :userId ORDER BY created_at DESC")
     fun getBudgetsByUser(userId: Int): LiveData<List<Budget>>
 
     // ✅ Get a specific budget by its ID and the user who owns it

@@ -1,5 +1,6 @@
 package com.ubaya.project_uas.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController

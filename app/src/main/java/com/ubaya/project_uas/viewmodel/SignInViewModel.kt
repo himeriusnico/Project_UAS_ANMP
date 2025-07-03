@@ -21,7 +21,7 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             try {
                 val user = db.userDao().login(username, password)
                 if (user != null) {
-                    saveSession(user.id)
+//                    saveSession(user.id)
                     userLiveData.postValue(user)
                     errorLiveData.postValue(null)
                 } else {
