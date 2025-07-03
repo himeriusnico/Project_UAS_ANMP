@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class NewExpenseViewModel(application: Application) : AndroidViewModel(application) {
     private val db = UserDatabase(application)
 
-    val budgets: LiveData<List<Budget>> = db.budgetDao().getAllBudgets()
+    val budgets: LiveData<List<Budget>> = db.budgetDao().getBudgetsByUser(1)
 
     fun getTotalSpentForBudget(budgetId: Int): LiveData<Int> {
         return db.expenseDao().getTotalSpentForBudget(budgetId)

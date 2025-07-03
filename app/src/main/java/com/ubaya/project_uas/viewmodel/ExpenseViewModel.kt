@@ -8,5 +8,5 @@ import com.ubaya.project_uas.model.UserDatabase
 
 class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
     private val expenseDao = UserDatabase(application).expenseDao()
-    val expenses: LiveData<List<ExpenseDisplay>> = expenseDao.getAllExpensesWithBudgetName()
+    val expenses: LiveData<List<ExpenseDisplay>> = expenseDao.getAllExpensesWithBudgetNameByUser(1)
 }
