@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ubaya.project_uas.model.UserDatabase
 import com.ubaya.project_uas.utils.SessionManager
+import com.ubaya.project_uas.view.AuthActivity
 import com.ubaya.project_uas.view.SignInFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +22,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     private val db = UserDatabase(application)
     private val userDao = db.userDao()
-    private val session = SessionManager(application)
+    private val sharedPref = application.getSharedPreferences("com.ubaya.project_uas.PREF", Context.MODE_PRIVATE)
+
 
     fun changePassword() {
         val old = oldPassword.value ?: ""
@@ -34,7 +36,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val userId = session.getUserId()
+            val userId = sharedPref.getInt("user_id", -1)
             val currentUser = userDao.getUserById(userId)
 
             if (currentUser?.password != old) {
@@ -48,8 +50,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun logout(context: Context) {
-        session.clearSession()
-        val intent = Intent(context, SignInFragment::class.java) // NOTE: must be an Activity
+        sharedPref.edit().clear().apply()
+        val intent = Intent(context, AuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
     }
