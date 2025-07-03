@@ -40,7 +40,7 @@ class SignUpFragment : Fragment() {
             viewModel.register(username, firstName, lastName, password)
         }
 
-        binding.tvToSignIn.setOnClickListener {
+        binding.txtSignIn.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }
