@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentProfileBinding
 import com.ubaya.project_uas.viewmodel.ProfileViewModel
 
@@ -26,35 +25,20 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize ViewModel
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // Show message via Toast
         viewModel.message.observe(viewLifecycleOwner) { msg ->
             msg?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Navigate to SignInFragment if requested
-        viewModel.navigateToLogin.observe(viewLifecycleOwner) { shouldNavigate ->
-            if (shouldNavigate == true) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main_container, SignInFragment()) // Make sure this ID exists
-                    .commit()
-
-                viewModel.navigateToLogin.value = false
-            }
-        }
-
-        // Logout button click
         binding.txtSignOut.setOnClickListener {
             viewModel.logout(requireContext())
         }
 
-        // Change password button click
         binding.btnChangePassword.setOnClickListener {
             viewModel.changePassword()
         }
