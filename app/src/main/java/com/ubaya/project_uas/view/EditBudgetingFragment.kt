@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentEditBudgetingBinding
 import com.ubaya.project_uas.model.Budget
+import com.ubaya.project_uas.utils.SessionManager
 import com.ubaya.project_uas.viewmodel.DetailBudgetingViewModel
 
 class EditBudgetingFragment : Fragment() {
@@ -18,9 +19,21 @@ class EditBudgetingFragment : Fragment() {
     private lateinit var viewModel: DetailBudgetingViewModel
     private var budget: Budget? = null
     private var totalUsed: Int = 0
+    private val userId: Int
+        get() {
+            val sharedPref = requireContext().getSharedPreferences(
+                "com.ubaya.project_uas.PREF",
+                android.content.Context.MODE_PRIVATE
+            )
+            return sharedPref.getInt("user_id", -1)
+        }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentEditBudgetingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,7 +45,7 @@ class EditBudgetingFragment : Fragment() {
         val budgetId = EditBudgetingFragmentArgs.fromBundle(requireArguments()).budgetId
 
         viewModel.fetchBudgetById(budgetId)
-        viewModel.fetchTotalUsedByBudgetIdLive(budgetId).observe(viewLifecycleOwner) {
+        viewModel.fetchTotalUsedByBudgetIdLive(budgetId, userId).observe(viewLifecycleOwner) {
             totalUsed = it ?: 0
         }
 
@@ -52,7 +65,11 @@ class EditBudgetingFragment : Fragment() {
             val updatedAmount = binding.txtNominal.text.toString().toIntOrNull() ?: 0
 
             if (updatedAmount < totalUsed) {
-                Toast.makeText(requireContext(), "Nominal tidak boleh kurang dari total pengeluaran: IDR $totalUsed", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Nominal tidak boleh kurang dari total pengeluaran: IDR $totalUsed",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 

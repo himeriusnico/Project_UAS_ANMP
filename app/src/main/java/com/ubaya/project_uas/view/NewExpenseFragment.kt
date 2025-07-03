@@ -1,6 +1,7 @@
 package com.ubaya.project_uas.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.ubaya.project_uas.databinding.FragmentNewExpenseBinding
 import com.ubaya.project_uas.model.Budget
 import com.ubaya.project_uas.model.Expense
+import com.ubaya.project_uas.utils.SessionManager
 import com.ubaya.project_uas.viewmodel.NewExpenseViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +24,11 @@ class NewExpenseFragment : Fragment() {
     private lateinit var viewModel: NewExpenseViewModel
     private var selectedBudget: Budget? = null
     private var totalSpent = 0
+    private val userId: Int
+        get() {
+            val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
+            return sharedPref.getInt("user_id", -1)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +43,16 @@ class NewExpenseFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[NewExpenseViewModel::class.java]
 
+
+
         // Set current date
-        val formattedDate = SimpleDateFormat("dd MMMM yyyy HH.mm a", Locale.getDefault()).format(Date())
+        val formattedDate =
+            SimpleDateFormat("dd MMMM yyyy HH.mm a", Locale.getDefault()).format(Date())
         binding.txtDate.text = formattedDate
 
         // Observe budget list and populate spinner
-        viewModel.budgets.observe(viewLifecycleOwner) { budgetList ->
+        viewModel.getBudgetsByUser(userId).observe(viewLifecycleOwner) { budgetList ->
+
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
@@ -65,7 +76,7 @@ class NewExpenseFragment : Fragment() {
                         binding.txtBudget.text = "Rp${selectedBudget!!.amount}"
 
                         // Observe total spent for selected budget
-                        viewModel.getTotalSpentForBudget(selectedBudget!!.id)
+                        viewModel.getTotalSpentForBudget(selectedBudget!!.id, userId)
                             .observe(viewLifecycleOwner) { total ->
                                 totalSpent = total ?: 0
                                 binding.txtCurrentSpending.text = "Rp$totalSpent"

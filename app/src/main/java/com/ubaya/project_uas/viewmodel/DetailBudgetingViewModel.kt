@@ -63,7 +63,7 @@ class DetailBudgetingViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    fun fetchTotalUsedByBudgetIdLive(budgetId: Int): LiveData<Int> {
-        return db.expenseDao().getTotalSpentForBudget(budgetId)
+    fun fetchTotalUsedByBudgetIdLive(budgetId: Int, userId: Int): LiveData<Int> {
+        return db.expenseDao().getTotalSpentForBudget(budgetId,userId)
     }
 }

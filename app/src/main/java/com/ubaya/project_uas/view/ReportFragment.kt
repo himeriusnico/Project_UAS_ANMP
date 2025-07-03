@@ -18,6 +18,15 @@ class ReportFragment : Fragment() {
     private lateinit var binding: FragmentReportBinding
     private lateinit var viewModel: ReportViewModel
     private lateinit var adapter: ReportAdapter
+    private val userId: Int
+        get() {
+            val sharedPref = requireContext().getSharedPreferences(
+                "com.ubaya.project_uas.PREF",
+                android.content.Context.MODE_PRIVATE
+            )
+            return sharedPref.getInt("user_id", -1)
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +43,7 @@ class ReportFragment : Fragment() {
         binding.recyclerReport.layoutManager = LinearLayoutManager(requireContext())
 
         // Observe data
-        viewModel.budgets.observe(viewLifecycleOwner) { budgetList ->
+        viewModel.getBudgetsWithTotalUsed(userId).observe(viewLifecycleOwner) { budgetList ->
             adapter = ReportAdapter(budgetList)
             binding.recyclerReport.adapter = adapter
             updateSummary(budgetList)

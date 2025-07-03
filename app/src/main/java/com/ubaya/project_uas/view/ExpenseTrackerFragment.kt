@@ -22,6 +22,11 @@ class ExpenseTrackerFragment : Fragment() {
     private lateinit var binding: FragmentExpenseTrackerBinding
     private lateinit var viewModel: ExpenseViewModel
     private lateinit var adapter: ExpenseTrackerAdapter
+    private val userId: Int
+        get() {
+            val sharedPref = requireContext().getSharedPreferences("com.ubaya.project_uas.PREF", android.content.Context.MODE_PRIVATE)
+            return sharedPref.getInt("user_id", -1)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +50,7 @@ class ExpenseTrackerFragment : Fragment() {
         binding.recyclerViewExpenseTracker.layoutManager = LinearLayoutManager(requireContext())
 
         // Observe expenses
-        viewModel.expenses.observe(viewLifecycleOwner) { expenseList ->
+        viewModel.getExpensesByUser(userId).observe(viewLifecycleOwner) { expenseList ->
             adapter = ExpenseTrackerAdapter(expenseList, ::onAmountClick)
             binding.recyclerViewExpenseTracker.adapter = adapter
         }
