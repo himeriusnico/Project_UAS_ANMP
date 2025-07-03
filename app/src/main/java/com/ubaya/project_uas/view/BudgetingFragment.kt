@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ubaya.project_uas.R
 import com.ubaya.project_uas.databinding.FragmentBudgetingBinding
 import com.ubaya.project_uas.viewmodel.BudgetingViewModel
 
@@ -45,8 +48,8 @@ class BudgetingFragment : Fragment() {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Add new budget", Toast.LENGTH_SHORT).show()
-            // TODO: Navigate to add budget screen
+            val action = BudgetingFragmentDirections.actionBudgetingFragmentToNewBudgetingFragment()
+            findNavController().navigate(action)
         }
     }
 }
