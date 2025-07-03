@@ -1,64 +1,70 @@
 package com.ubaya.project_uas.view
 
 import android.os.Bundle
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ubaya.project_uas.R
-import com.ubaya.project_uas.model.User
-import com.ubaya.project_uas.model.UserDatabase
+import androidx.lifecycle.ViewModelProvider
+import com.ubaya.project_uas.databinding.FragmentSignUpBinding // Pastikan nama ini sesuai file layout Anda
+
+import com.ubaya.project_uas.viewmodel.SignUpViewModel
 
 class SignUpFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+    private lateinit var binding: FragmentSignUpBinding
+    private lateinit var viewModel: SignUpViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val etUsername = view.findViewById<EditText>(R.id.etUsername)
-        val etFirstName = view.findViewById<EditText>(R.id.etFirstName)
-        val etLastName = view.findViewById<EditText>(R.id.etLastName)
-        val etPassword = view.findViewById<EditText>(R.id.etPassword)
-        val etConfirmPassword = view.findViewById<EditText>(R.id.etConfirmPassword)
-        val btnRegister = view.findViewById<Button>(R.id.btnRegister)
-        val tvToSignIn = view.findViewById<TextView>(R.id.tvToSignIn)
+        super.onViewCreated(view, savedInstanceState)
 
-        btnRegister.setOnClickListener {
-            val username = etUsername.text.toString()
-            val firstName = etFirstName.text.toString()
-            val lastName = etLastName.text.toString()
-            val password = etPassword.text.toString()
-            val confirm = etConfirmPassword.text.toString()
+        // Inisialisasi ViewModel
+        viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
-            if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-                Toast.makeText(context, "Semua field wajib diisi", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        // Mengamati perubahan dari ViewModel
+        observeViewModel()
 
-            if (password != confirm) {
-                Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        // Menangani klik pada tombol register
+        binding.btnRegister.setOnClickListener {
+            val username = binding.etUsername.text.toString()
+            val firstName = binding.etFirstName.text.toString()
+            val lastName = binding.etLastName.text.toString()
+            val password = binding.etPassword.text.toString()
 
-            val db = UserDatabase(requireContext())
-            Thread {
-                val existing = db.userDao().getUserByUsername(username)
-                if (existing != null) {
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(context, "Username sudah digunakan", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    db.userDao().insertUser(User(username, firstName, lastName, password))
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(context, "Registrasi berhasil, silakan login", Toast.LENGTH_SHORT).show()
-                        parentFragmentManager.popBackStack()
-                    }
-                }
-            }.start()
+            // Fragment hanya mengirim data, ViewModel yang akan memvalidasi
+            viewModel.register(username, firstName, lastName, password)
         }
 
-        tvToSignIn.setOnClickListener {
+        // Menangani klik untuk kembali ke halaman Sign In
+        binding.tvToSignIn.setOnClickListener {
+            // Kembali ke fragment sebelumnya (SignInFragment)
             parentFragmentManager.popBackStack()
+        }
+    }
+
+    private fun observeViewModel() {
+        // Mengamati jika registrasi berhasil
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                Toast.makeText(context, "Registrasi berhasil! Silakan login.", Toast.LENGTH_LONG).show()
+                // Kembali ke halaman Sign In setelah berhasil
+                parentFragmentManager.popBackStack()
+            }
+        }
+
+        // Mengamati jika ada pesan error
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            // Tampilkan pesan error jika ada
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 }

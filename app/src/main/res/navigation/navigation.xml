@@ -10,30 +10,40 @@
         android:name="com.ubaya.project_uas.view.MainActivity"
         android:label="MainActivity" />
     <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.ubaya.project_uas.view.SignUpFragment"
-        android:label="SignUpFragment" />
-    <fragment
-        android:id="@+id/signInFragment"
-        android:name="com.ubaya.project_uas.view.SignInFragment"
-        android:label="SignInFragment" />
-    <fragment
-        android:id="@+id/expenseTrackerFragment"
+        android:id="@+id/itemExpenseTracker"
         android:name="com.ubaya.project_uas.view.ExpenseTrackerFragment"
         android:label="fragment_expense_tracker"
         tools:layout="@layout/fragment_expense_tracker" >
         <action
             android:id="@+id/action_expenseTrackerFragment_to_newExpenseFragment"
-            app:destination="@id/newExpenseFragment" />
+            app:destination="@id/itemNewExpense" />
     </fragment>
     <fragment
-        android:id="@+id/newExpenseFragment"
+        android:id="@+id/itemNewExpense"
         android:name="com.ubaya.project_uas.view.NewExpenseFragment"
         android:label="fragment_new_expense"
         tools:layout="@layout/fragment_new_expense" />
     <fragment
-        android:id="@+id/reportFragment"
+        android:id="@+id/itemReport"
         android:name="com.ubaya.project_uas.view.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/itemProfile"
+        android:name="com.ubaya.project_uas.view.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/itemBudgeting"
+        android:name="com.ubaya.project_uas.view.BudgetingFragment"
+        android:label="fragment_budgeting"
+        tools:layout="@layout/fragment_budgeting" >
+        <action
+            android:id="@+id/action_budgetingFragment_to_newBudgetingFragment"
+            app:destination="@id/itemNewBudgeting" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemNewBudgeting"
+        android:name="com.ubaya.project_uas.view.NewBudgetingFragment"
+        android:label="fragment_new_budgeting"
+        tools:layout="@layout/fragment_new_budgeting" />
 </navigation>
