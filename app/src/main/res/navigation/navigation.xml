@@ -16,10 +16,10 @@
         tools:layout="@layout/fragment_expense_tracker" >
         <action
             android:id="@+id/action_expenseTrackerFragment_to_newExpenseFragment"
-            app:destination="@id/itemNewExpense" />
+            app:destination="@id/newExpenseFragment" />
     </fragment>
     <fragment
-        android:id="@+id/itemNewExpense"
+        android:id="@+id/newExpenseFragment"
         android:name="com.ubaya.project_uas.view.NewExpenseFragment"
         android:label="fragment_new_expense"
         tools:layout="@layout/fragment_new_expense" />

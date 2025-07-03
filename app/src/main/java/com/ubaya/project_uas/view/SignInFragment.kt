@@ -42,7 +42,7 @@ class SignInFragment : Fragment() {
 
         binding.tvToSignUp.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_container, SignUpFragment())
+                .replace(R.id.auth_container, SignUpFragment())
                 .addToBackStack(null)
                 .commit()
         }

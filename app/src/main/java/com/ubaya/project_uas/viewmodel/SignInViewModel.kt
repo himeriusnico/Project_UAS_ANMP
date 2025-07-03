@@ -4,28 +4,33 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope // Import yang benar
 import com.ubaya.project_uas.model.User
 import com.ubaya.project_uas.model.UserDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SignInViewModel(application: Application): AndroidViewModel(application) {
-
+class SignInViewModel(application: Application) : AndroidViewModel(application) {
     val userLiveData = MutableLiveData<User?>()
     val errorLiveData = MutableLiveData<String?>()
 
-    private val db = UserDatabase(getApplication())
+    private val db = UserDatabase(application)
 
     fun login(username: String, password: String) {
-        viewModelScope.launch {
-            val user = db.userDao().login(username, password)
-            if (user != null) {
-                saveSession(user.id)
-                userLiveData.postValue(user)
-                errorLiveData.postValue(null)
-            } else {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val user = db.userDao().login(username, password)
+                if (user != null) {
+                    saveSession(user.id)
+                    userLiveData.postValue(user)
+                    errorLiveData.postValue(null)
+                } else {
+                    userLiveData.postValue(null)
+                    errorLiveData.postValue("Username atau password salah")
+                }
+            } catch (e: Exception) {
                 userLiveData.postValue(null)
-                errorLiveData.postValue("Invalid username or password")
+                errorLiveData.postValue("Terjadi kesalahan saat login")
             }
         }
     }

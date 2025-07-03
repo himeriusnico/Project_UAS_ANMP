@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ubaya.project_uas.model.User
 import com.ubaya.project_uas.model.UserDao
 import com.ubaya.project_uas.model.UserDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,29 +31,27 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
      * Fungsi untuk mendaftarkan pengguna baru.
      */
     fun register(username: String, firstName: String, lastName: String, password: String) {
-        // 1. Validasi Input
         if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()) {
             _error.postValue("Semua kolom harus diisi")
             return
         }
 
-        // 2. Jalankan proses di background thread
-        viewModelScope.launch {
-            // 3. Cek apakah username sudah ada
-            if (userDao.getUserByUsername(username) != null) {
-                _error.postValue("Username sudah digunakan, silakan pilih yang lain")
-            } else {
-                // 4. Jika belum ada, buat objek User dan masukkan ke database
-                val newUser = User(
-                    username = username,
-                    firstName = firstName,
-                    lastName = lastName,
-                    password = password // PENTING: Di aplikasi nyata, password harus di-hash!
-                )
-                userDao.insertUser(newUser)
-
-                // 5. Beri tahu Fragment bahwa registrasi berhasil
-                _registrationSuccess.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) { // ✅ gunakan background thread
+            try {
+                if (userDao.getUserByUsername(username) != null) {
+                    _error.postValue("Username sudah digunakan, silakan pilih yang lain")
+                } else {
+                    val newUser = User(
+                        username = username,
+                        firstName = firstName,
+                        lastName = lastName,
+                        password = password
+                    )
+                    userDao.insertUser(newUser)
+                    _registrationSuccess.postValue(true)
+                }
+            } catch (e: Exception) {
+                _error.postValue("Terjadi kesalahan: ${e.message}")
             }
         }
     }
