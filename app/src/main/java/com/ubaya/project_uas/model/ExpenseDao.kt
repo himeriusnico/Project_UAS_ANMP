@@ -13,8 +13,14 @@ interface ExpenseDao {
     fun insertExpense(expense: Expense)
 
     // List all expenses, newest first
-    @Query("SELECT * FROM expense ORDER BY created_at DESC")
-    fun getAllExpenses(): List<Expense>
+    @Query("""
+    SELECT e.* FROM expense e
+    INNER JOIN budgets b ON e.budget_id = b.id
+    WHERE b.user_id = :userId
+    ORDER BY e.created_at DESC
+""")
+    fun getAllExpensesByUser(userId: Int): List<Expense>
+
 
     // Get a specific expense by ID (if needed)
     @Query("SELECT * FROM expense WHERE id = :expenseId LIMIT 1")
@@ -28,14 +34,17 @@ interface ExpenseDao {
     @Query("SELECT SUM(amount) FROM expense WHERE budget_id = :budgetId")
     fun getTotalSpentForBudget(budgetId: Int): LiveData<Int>
 
-    @Query("SELECT e.id, e.amount, e.description, \n" +
-            "           e.created_at AS createdAt, \n" +
-            "           b.name AS budgetName\n" +
-            "    FROM Expense e\n" +
-            "    INNER JOIN budgets b ON e.budget_id = b.id\n" +
-            "    ORDER BY e.created_at DESC"
-    )
-    fun getAllExpensesWithBudgetName(): LiveData<List<ExpenseDisplay>>
+    @Query("""
+    SELECT e.id, e.amount, e.description, 
+           e.created_at AS createdAt, 
+           b.name AS budgetName
+    FROM Expense e
+    INNER JOIN budgets b ON e.budget_id = b.id
+    WHERE b.user_id = :userId
+    ORDER BY e.created_at DESC
+""")
+    fun getAllExpensesWithBudgetNameByUser(userId: Int): LiveData<List<ExpenseDisplay>>
+
 
     @Query("SELECT b.id, b.name, b.amount, IFNULL(SUM(e.amount), 0) AS used FROM budgets b LEFT JOIN expense e ON e.budget_id = b.id GROUP BY b.id"
     )
