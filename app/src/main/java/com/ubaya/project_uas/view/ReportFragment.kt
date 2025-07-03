@@ -5,56 +5,54 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ubaya.project_uas.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.ubaya.project_uas.databinding.FragmentReportBinding
+import com.ubaya.project_uas.viewmodel.ReportViewModel
+import com.ubaya.project_uas.adapter.ReportAdapter
+import com.ubaya.project_uas.model.Budget
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ReportFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ReportFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentReportBinding
+    private lateinit var viewModel: ReportViewModel
+    private lateinit var adapter: ReportAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        // Initialize ViewModel (done in onViewCreated for consistency)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // ViewModel
+        viewModel = ViewModelProvider(this)[ReportViewModel::class.java]
+
+        // RecyclerView
+        binding.recyclerReport.layoutManager = LinearLayoutManager(requireContext())
+
+        // Observe data
+        viewModel.budgets.observe(viewLifecycleOwner) { budgetList ->
+            adapter = ReportAdapter(budgetList)
+            binding.recyclerReport.adapter = adapter
+            updateSummary(budgetList)
         }
+    }
+
+    private fun updateSummary(budgetList: List<Budget>) {
+        val totalUsed = budgetList.sumOf { it.used }
+        val totalMax = budgetList.sumOf { it.max }
+
+        binding.txtTotalExpenses.text = "Rp$totalUsed"
+        binding.txtBudgetReportFragment.text = "Rp$totalMax"
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ReportFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ReportFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    ): View {
+        binding = FragmentReportBinding.inflate(inflater, container, false)
+        return binding.root
     }
 }

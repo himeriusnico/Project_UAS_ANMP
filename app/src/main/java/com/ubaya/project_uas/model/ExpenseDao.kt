@@ -28,13 +28,11 @@ interface ExpenseDao {
     @Query("SELECT SUM(amount) FROM expense WHERE budget_id = :budgetId")
     fun getTotalSpentForBudget(budgetId: Int): LiveData<Int>
 
-    @Query(
-        """
-        SELECT e.id, e.amount, e.description, e.created_at, b.name AS budgetName
-        FROM Expense e
-        INNER JOIN budgets b ON e.budget_id = b.id
-        ORDER BY e.created_at DESC
-    """
+    @Query("SELECT e.id, e.amount, e.description, e.created_at, b.name AS budgetName FROM Expense e INNER JOIN budgets b ON e . budget_id = b.id ORDER BY e.created_at DESC"
     )
     fun getAllExpensesWithBudgetName(): LiveData<List<ExpenseDisplay>>
+
+    @Query("SELECT b.id, b.name, b.amount, IFNULL(SUM(e.amount), 0) AS used FROM budgets b LEFT JOIN expense e ON e.budget_id = b.id GROUP BY b.id"
+    )
+    fun getBudgetsWithTotalUsed(): LiveData<List<BudgetWithTotalUsed>>
 }

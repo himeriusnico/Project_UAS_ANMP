@@ -68,3 +68,11 @@ data class ExpenseDisplay(
     val budgetName: String
 )
 
+data class BudgetWithTotalUsed(
+    val id: Int,
+    val name: String,
+    val amount: Int,
+    val used: Int
+)
+
+
