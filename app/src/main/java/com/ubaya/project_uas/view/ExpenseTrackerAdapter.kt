@@ -25,7 +25,7 @@ class ExpenseTrackerAdapter(
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val expense = expenses[position]
         val formattedDate =
-            SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(expense.createdAt))
+            SimpleDateFormat("dd MMM yyyy HH.mm a", Locale("id")).format(Date(expense.createdAt))
 
         with(holder.binding) {
             txtDescription.text = expense.description

@@ -9,9 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ubaya.project_uas.R
+import com.ubaya.project_uas.databinding.DialogExpenseDetailBinding
 import com.ubaya.project_uas.databinding.FragmentExpenseTrackerBinding
 import com.ubaya.project_uas.model.ExpenseDisplay
 import com.ubaya.project_uas.viewmodel.ExpenseViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ExpenseTrackerFragment : Fragment() {
 
@@ -55,8 +59,27 @@ class ExpenseTrackerFragment : Fragment() {
 
     // Click handler for expense amount
     private fun onAmountClick(expense: ExpenseDisplay) {
-        // You can show a Toast, navigate to detail screen, or log
-        // Example:
-        println("Clicked amount: Rp${expense.amount} | Description: ${expense.description}")
+        val dialogBinding = DialogExpenseDetailBinding.inflate(LayoutInflater.from(requireContext()))
+
+        // Set values using ViewBinding
+        val formattedDate =
+            SimpleDateFormat("dd MMM yyyy HH.mm a", Locale("id")).format(Date(expense.createdAt))
+        dialogBinding.txtDate.text = formattedDate
+        dialogBinding.txtDescription.text = expense.description
+        dialogBinding.chip2.text = expense.budgetName
+        dialogBinding.txtAmount.text = "IDR %,d".format(expense.amount)
+
+        // Build the dialog with custom view
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+
+        dialogBinding.btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
+
+
 }

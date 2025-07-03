@@ -37,7 +37,7 @@ class NewExpenseFragment : Fragment() {
         viewModel = ViewModelProvider(this)[NewExpenseViewModel::class.java]
 
         // Set current date
-        val formattedDate = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date())
+        val formattedDate = SimpleDateFormat("dd MMMM yyyy HH.mm a", Locale.getDefault()).format(Date())
         binding.txtDate.text = formattedDate
 
         // Observe budget list and populate spinner
