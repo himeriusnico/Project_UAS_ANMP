@@ -46,6 +46,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
             userDao.updatePassword(userId, new)
             message.postValue("Password changed successfully")
+            navigateToLogin.postValue(true)
         }
     }
 
