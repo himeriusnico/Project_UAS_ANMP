@@ -17,6 +17,8 @@ class DetailBudgetingViewModel(application: Application) : AndroidViewModel(appl
     private val budgetDao = UserDatabase(application).budgetDao()
     val budgetLD = MutableLiveData<Budget>()
     private val job = Job()
+    val totalUsedLD = MutableLiveData<Int>()
+
     override val coroutineContext: CoroutineContext
         get() = job
 
@@ -59,5 +61,9 @@ class DetailBudgetingViewModel(application: Application) : AndroidViewModel(appl
             // Hapus budget-nya
             db.budgetDao().deleteBudgetById(budgetId)
         }
+    }
+
+    fun fetchTotalUsedByBudgetIdLive(budgetId: Int): LiveData<Int> {
+        return db.expenseDao().getTotalSpentForBudget(budgetId)
     }
 }

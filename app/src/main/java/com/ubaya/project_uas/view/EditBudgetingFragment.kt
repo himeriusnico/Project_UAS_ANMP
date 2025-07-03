@@ -17,6 +17,7 @@ class EditBudgetingFragment : Fragment() {
     private lateinit var binding: FragmentEditBudgetingBinding
     private lateinit var viewModel: DetailBudgetingViewModel
     private var budget: Budget? = null
+    private var totalUsed: Int = 0
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -31,6 +32,9 @@ class EditBudgetingFragment : Fragment() {
         val budgetId = EditBudgetingFragmentArgs.fromBundle(requireArguments()).budgetId
 
         viewModel.fetchBudgetById(budgetId)
+        viewModel.fetchTotalUsedByBudgetIdLive(budgetId).observe(viewLifecycleOwner) {
+            totalUsed = it ?: 0
+        }
 
         binding.btnUpdate.text = "Save"
         binding.txtEditBudget.text = "Edit Budget"
@@ -46,6 +50,12 @@ class EditBudgetingFragment : Fragment() {
         binding.btnUpdate.setOnClickListener {
             val updatedName = binding.txtTitle.text.toString()
             val updatedAmount = binding.txtNominal.text.toString().toIntOrNull() ?: 0
+
+            if (updatedAmount < totalUsed) {
+                Toast.makeText(requireContext(), "Nominal tidak boleh kurang dari total pengeluaran: IDR $totalUsed", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             budget?.let { oldBudget ->
                 val updatedBudget = Budget(
                     name = updatedName,
