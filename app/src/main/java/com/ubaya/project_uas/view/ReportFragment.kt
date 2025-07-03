@@ -11,6 +11,7 @@ import com.ubaya.project_uas.databinding.FragmentReportBinding
 import com.ubaya.project_uas.viewmodel.ReportViewModel
 import com.ubaya.project_uas.adapter.ReportAdapter
 import com.ubaya.project_uas.model.Budget
+import com.ubaya.project_uas.model.BudgetWithTotalUsed
 
 class ReportFragment : Fragment() {
 
@@ -40,9 +41,9 @@ class ReportFragment : Fragment() {
         }
     }
 
-    private fun updateSummary(budgetList: List<Budget>) {
+    private fun updateSummary(budgetList: List<BudgetWithTotalUsed>) {
         val totalUsed = budgetList.sumOf { it.used }
-        val totalMax = budgetList.sumOf { it.max }
+        val totalMax = budgetList.sumOf { it.amount }
 
         binding.txtTotalExpenses.text = "Rp$totalUsed"
         binding.txtBudgetReportFragment.text = "Rp$totalMax"

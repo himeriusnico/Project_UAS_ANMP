@@ -22,9 +22,9 @@ interface UserDao {
     fun updatePassword(userId: Int, newPassword: String)
 
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
-    suspend fun getUserById(id: Int): User?
+    fun getUserById(id: Int): User?
 
     @Update
-    suspend fun update(user: User)
+    fun update(user: User)
 }
 

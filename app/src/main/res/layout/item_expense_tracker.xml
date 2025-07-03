@@ -7,30 +7,51 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
+    <!-- Date -->
     <TextView
-        android:id="@+id/txtExpenseReport"
+        android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tanggal"
+        android:text="03 Jul 2025"
+        android:textSize="14sp"
+        android:textColor="#888888"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
+    <!-- Amount -->
     <TextView
-        android:id="@+id/txtBudgetReport"
+        android:id="@+id/txtAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="RpXXX"
+        android:text="Rp25.000"
+        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
+    <!-- Description -->
+    <TextView
+        android:id="@+id/txtDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Beli es krim"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/txtDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        tools:ignore="HardcodedText" />
+
+    <!-- Budget name chip -->
     <com.google.android.material.chip.Chip
         android:id="@+id/chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescription"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtExpenseReport"
-        tools:text="Expense A" />
+        tools:text="Makanan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

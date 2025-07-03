@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         // Jika pertama kali dijalankan dan belum ada fragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SignInFragment())
+                .replace(R.id.main_container, SignInFragment())
                 .commit()
         }
     }

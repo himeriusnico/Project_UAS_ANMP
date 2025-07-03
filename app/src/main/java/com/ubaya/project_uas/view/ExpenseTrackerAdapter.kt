@@ -27,13 +27,15 @@ class ExpenseTrackerAdapter(
         val formattedDate =
             SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(expense.createdAt))
 
-        holder.binding.txtExpenseReport.text = formattedDate
-        holder.binding.txtBudgetReport.text = "Rp${expense.amount}"
-        holder.binding.chip.text = expense.budgetName
+        with(holder.binding) {
+            txtDescription.text = expense.description
+            txtAmount.text = "Rp${expense.amount}"
+            txtDate.text = formattedDate
+            chip.text = expense.budgetName
 
-        // Handle amount click
-        holder.binding.txtBudgetReport.setOnClickListener {
-            onAmountClick(expense)
+            txtAmount.setOnClickListener {
+                onAmountClick(expense)
+            }
         }
     }
 
